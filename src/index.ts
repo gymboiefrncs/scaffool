@@ -74,3 +74,19 @@ const userInputs = async () => {
     packages,
   };
 };
+
+const makeDirectories = async () => {
+  const inputs = await userInputs();
+  const dir = process.cwd();
+  const options = {
+    mode: 0o775,
+  };
+  const projectPath = join(dir, inputs.projectName);
+  try {
+    await fs.ensureDir(projectPath, options);
+    console.log("success!");
+  } catch (err) {
+    console.log(err);
+  }
+};
+makeDirectories();
