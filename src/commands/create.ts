@@ -1,4 +1,4 @@
-import { userInputs } from "../prompts/inputs.js";
+import { userInputs } from "../prompts/common.js";
 import { makeDirectories } from "../generators/generator.js";
 
 export const createCommand = async () => {
