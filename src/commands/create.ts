@@ -3,6 +3,7 @@ import { makeDirectories } from "../generators/generator.js";
 import { expressInputs } from "../prompts/express.js";
 import { installPackages } from "../utils/packageManager.js";
 import path from "node:path";
+import chalk from "chalk";
 
 export type Packages = {
   devPkgs: string[];
@@ -11,21 +12,24 @@ export type Packages = {
 
 export const createCommand = async (framework: string) => {
   const answers = await userInputs();
+
+  console.log(chalk.blue("Creating project..."));
+
   await makeDirectories(answers.projectName);
   let packages: Packages[] = [];
 
   if (framework === "express") {
     const expressAnswers = await expressInputs();
     packages.push(expressAnswers);
-    console.log(packages);
   }
   if (packages.length) {
-    console.log("installing dependencies...");
     await installPackages(
       path.resolve(answers.projectName),
       packages,
       answers.useTypescript
     );
-    console.log("packages installed");
   }
+
+  console.log(chalk.green("Done creating project"));
+  console.log(chalk.greenBright("Happy coding :)"));
 };

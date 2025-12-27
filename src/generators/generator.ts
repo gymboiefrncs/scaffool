@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import fs from "fs-extra";
 import { join } from "path";
 
@@ -8,8 +9,9 @@ export const makeDirectories = async (projectName: string) => {
   };
   const projectPath = join(dir, projectName);
   try {
+    console.log(chalk.blue("Creating directory..."));
     await fs.ensureDir(projectPath, options);
-    console.log("success!");
+    console.log(chalk.green("Done creating directory"));
   } catch (err) {
     console.log(err);
   }

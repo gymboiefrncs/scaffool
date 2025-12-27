@@ -1,7 +1,9 @@
-import { execa } from "execa";
+import cliProgress from "cli-progress";
+import chalk from "chalk";
+import { install, installDependencies } from "./loadingBar.js";
 import type { Packages } from "../commands/create.js";
 
-type AllowedPackageManager = "yarn" | "pnpm" | "npm";
+export type AllowedPackageManager = "yarn" | "pnpm" | "npm";
 
 export const installPackages = async (
   projectPath: string,
@@ -9,36 +11,62 @@ export const installPackages = async (
   useTypescript: boolean,
   packageManager: AllowedPackageManager = "npm"
 ) => {
-  await npmInit(projectPath, packageManager);
-
-  if (useTypescript)
-    await execa(packageManager, ["i", "-D", "typescript"], {
-      cwd: projectPath,
-      stdio: "inherit",
-    });
-
   const { devPkgs, regPkgs } = packages[0]!;
+
+  let totalSteps = 1;
+  if (useTypescript) totalSteps++;
+  if (regPkgs.length) totalSteps++;
+  if (devPkgs.length) totalSteps++;
+
+  const bar = new cliProgress.SingleBar({
+    format: `${chalk.blue("Setup")} |{bar}| {percentage}% | {step}`,
+    barCompleteChar: "\u2588",
+    barIncompleteChar: "\u2591",
+    hideCursor: true,
+  });
+
+  bar.start(totalSteps, 0, { step: "Starting..." });
+
+  await install(
+    "Initializing",
+    ["init", "-y"],
+    projectPath,
+    packageManager,
+    bar
+  );
+
+  if (useTypescript) {
+    await install(
+      "Installing typescript",
+      ["i", "-D", "typescript"],
+      projectPath,
+      packageManager,
+      bar
+    );
+  }
+
   if (regPkgs.length) {
-    await execa(packageManager, ["i", ...regPkgs], {
-      cwd: projectPath,
-      stdio: "inherit",
-    });
+    await installDependencies(
+      "Installing dependencies",
+      regPkgs,
+      projectPath,
+      packageManager,
+      false,
+      bar
+    );
   }
 
   if (devPkgs.length) {
-    await execa(packageManager, ["i", "-D", ...devPkgs], {
-      cwd: projectPath,
-      stdio: "inherit",
-    });
+    await installDependencies(
+      "Installing devDependencies",
+      devPkgs,
+      projectPath,
+      packageManager,
+      true,
+      bar
+    );
   }
-};
 
-const npmInit = async (
-  projectPath: string,
-  packageManager: AllowedPackageManager = "npm"
-) => {
-  await execa(packageManager, ["init", "-y"], {
-    cwd: projectPath,
-    stdio: "inherit",
-  });
+  bar.stop();
+  console.log(chalk.green(`\nProject setup complete!`));
 };
