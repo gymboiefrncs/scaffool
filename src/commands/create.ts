@@ -12,15 +12,15 @@ export type Packages = {
 
 export const createCommand = async (framework: string) => {
   const answers = await userInputs();
-
-  console.log(chalk.blue("Creating project..."));
-
-  await makeDirectories(answers.projectName);
   let packages: Packages[] = [];
 
   if (framework === "express") {
     const expressAnswers = await expressInputs();
     packages.push(expressAnswers);
+
+    console.log(chalk.cyan("Creating project..."));
+
+    await makeDirectories(answers.projectName);
   }
   if (packages.length) {
     await installPackages(
@@ -31,5 +31,5 @@ export const createCommand = async (framework: string) => {
   }
 
   console.log(chalk.green("Done creating project"));
-  console.log(chalk.greenBright("Happy coding :)"));
+  console.log(chalk.green.bold("Happy coding :)"));
 };

@@ -23,9 +23,11 @@ export const installDependencies = async (
   bar: cliProgress.SingleBar
 ) => {
   bar.update({ step: label });
-  await execa(manager, ["i", dev ? "-D" : "", ...pkgs].filter(Boolean), {
-    cwd,
-    stdio: "pipe",
-  });
-  bar.increment();
+  for (const pkg of pkgs) {
+    await execa(manager, ["i", dev ? "-D" : "", pkg].filter(Boolean), {
+      cwd,
+      stdio: "pipe",
+    });
+    bar.increment();
+  }
 };

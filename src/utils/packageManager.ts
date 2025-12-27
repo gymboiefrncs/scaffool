@@ -15,11 +15,13 @@ export const installPackages = async (
 
   let totalSteps = 1;
   if (useTypescript) totalSteps++;
-  if (regPkgs.length) totalSteps++;
-  if (devPkgs.length) totalSteps++;
+  totalSteps += regPkgs.length;
+  totalSteps += devPkgs.length;
 
   const bar = new cliProgress.SingleBar({
-    format: `${chalk.blue("Setup")} |{bar}| {percentage}% | {step}`,
+    format: `${chalk.blue("Setup")} |${chalk.green(
+      "{bar}"
+    )}| {percentage}% | {step}`,
     barCompleteChar: "\u2588",
     barIncompleteChar: "\u2591",
     hideCursor: true,

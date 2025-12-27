@@ -9,9 +9,9 @@ export const makeDirectories = async (projectName: string) => {
   };
   const projectPath = join(dir, projectName);
   try {
-    console.log(chalk.blue("Creating directory..."));
+    console.log(chalk.cyan("Creating directory..."));
     await fs.ensureDir(projectPath, options);
-    console.log(chalk.green("Done creating directory"));
+    console.log(chalk.cyan("Done creating directory\n"));
   } catch (err) {
     console.log(err);
   }
