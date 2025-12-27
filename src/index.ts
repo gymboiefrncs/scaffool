@@ -8,10 +8,8 @@ program
   .description("Project scaffolding tool")
   .version("1.0.0");
 
-program.option("-f, --framework <type>", "choose framework", "express");
-
 program
-  .command("build")
+  .command("build <framework>")
   .description("Create a new project folder")
   .action(createCommand);
 
