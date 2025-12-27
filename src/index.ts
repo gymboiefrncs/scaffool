@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-import { makeDirectories } from "./generators/generator.js";
 import { Command } from "commander";
-import { userInputs } from "./prompts/inputs.js";
+import { createCommand } from "./commands/create.js";
 const program = new Command();
 
 program
@@ -14,9 +13,6 @@ program.option("-f, --framework <type>", "choose framework", "express");
 program
   .command("build")
   .description("Create a new project folder")
-  .action(async () => {
-    const answers = await userInputs();
-    makeDirectories(answers.projectName);
-  });
+  .action(createCommand);
 
-program.parseAsync(process.argv);
+program.parseAsync();
