@@ -1,9 +1,10 @@
-import { checkbox } from "@inquirer/prompts";
+import { checkbox, Separator } from "@inquirer/prompts";
 
 export const expressInputs = async () => {
   const expressPackages = await checkbox({
     message: "Select packages you want to install",
     choices: [
+      new Separator("==== DevDependencies ===="),
       {
         name: "nodemon",
         value: "nodemon",
@@ -12,6 +13,7 @@ export const expressInputs = async () => {
         name: "tsx",
         value: "tsx",
       },
+      new Separator("==== Dependencies ===="),
       {
         name: "express-session",
         value: "express-session",

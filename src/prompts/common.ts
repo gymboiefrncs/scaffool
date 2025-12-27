@@ -1,10 +1,11 @@
-import { input, select } from "@inquirer/prompts";
+import { input, select, confirm } from "@inquirer/prompts";
 
 export const userInputs = async () => {
   const projectName = await input({
     message: "Enter the project name:",
     validate: (val) => val.trim() !== "" || "Project cannot be empty",
   });
+  const language = await confirm({ message: "Use typescript?" });
   const LICENSE = await select({
     message: "Select license:",
     choices: [
@@ -26,6 +27,7 @@ export const userInputs = async () => {
   });
   return {
     projectName,
+    language,
     LICENSE,
   };
 };
