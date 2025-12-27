@@ -1,20 +1,32 @@
 import { execa } from "execa";
+import type { Packages } from "../commands/create.js";
 
 type AllowedPackageManager = "yarn" | "pnpm" | "npm";
 
 export const installPackages = async (
   projectPath: string,
-  packages: string[],
+  packages: Packages[],
+  useTypescript: boolean,
   packageManager: AllowedPackageManager = "npm"
 ) => {
   await npmInit(projectPath, packageManager);
 
-  if (!packages.length) return;
+  if (useTypescript) await execa(packageManager, ["i", "typescript"]);
 
-  await execa(packageManager, ["i", ...packages], {
-    cwd: projectPath,
-    stdio: "inherit",
-  });
+  const { devPkgs, regPkgs } = packages[0]!;
+  if (regPkgs.length) {
+    await execa(packageManager, ["i", ...regPkgs], {
+      cwd: projectPath,
+      stdio: "inherit",
+    });
+  }
+
+  if (devPkgs.length) {
+    await execa(packageManager, ["i", "-D", ...devPkgs], {
+      cwd: projectPath,
+      stdio: "inherit",
+    });
+  }
 };
 
 const npmInit = async (

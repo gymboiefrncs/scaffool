@@ -1,5 +1,16 @@
 import { checkbox, Separator } from "@inquirer/prompts";
 
+const devMap: Record<string, boolean> = {
+  nodemon: true,
+  tsx: true,
+  "express-session": false,
+  cors: false,
+  ejs: false,
+  pg: false,
+  dotenv: false,
+  helmet: false,
+};
+
 export const expressInputs = async () => {
   const expressPackages = await checkbox({
     message: "Select packages you want to install",
@@ -38,5 +49,7 @@ export const expressInputs = async () => {
     ],
   });
 
-  return expressPackages;
+  const devPkgs = expressPackages.filter((pkg) => devMap[pkg]);
+  const regPkgs = expressPackages.filter((pkg) => !devMap[pkg]);
+  return { devPkgs, regPkgs };
 };
