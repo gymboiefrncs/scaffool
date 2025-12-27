@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { makeDirectories } from "./generator.js";
+import { makeDirectories } from "./generators/generator.js";
 import { Command } from "commander";
-import { userInputs } from "./inputs.js";
+import { userInputs } from "./prompts/inputs.js";
 const program = new Command();
 
 program
