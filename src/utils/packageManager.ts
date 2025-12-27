@@ -11,7 +11,11 @@ export const installPackages = async (
 ) => {
   await npmInit(projectPath, packageManager);
 
-  if (useTypescript) await execa(packageManager, ["i", "typescript"]);
+  if (useTypescript)
+    await execa(packageManager, ["i", "-D", "typescript"], {
+      cwd: projectPath,
+      stdio: "inherit",
+    });
 
   const { devPkgs, regPkgs } = packages[0]!;
   if (regPkgs.length) {
