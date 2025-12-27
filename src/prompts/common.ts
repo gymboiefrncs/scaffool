@@ -5,7 +5,7 @@ export const userInputs = async () => {
     message: "Enter the project name:",
     validate: (val) => val.trim() !== "" || "Project cannot be empty",
   });
-  const language = await confirm({ message: "Use typescript?" });
+  const useTypescript = await confirm({ message: "Use typescript?" });
   const LICENSE = await select({
     message: "Select license:",
     choices: [
@@ -27,7 +27,7 @@ export const userInputs = async () => {
   });
   return {
     projectName,
-    language,
+    useTypescript,
     LICENSE,
   };
 };
