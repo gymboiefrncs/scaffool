@@ -1,6 +1,6 @@
 import cliProgress from "cli-progress";
 import chalk from "chalk";
-import { install, installDependencies } from "./loadingBar.js";
+import { install, installDependencies } from "./packageInstaller.js";
 import type { Packages } from "../commands/create.js";
 import { initializeTs } from "./initTs.js";
 
