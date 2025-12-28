@@ -7,6 +7,7 @@ import { initializeTs } from "./initTs.js";
 export type AllowedPackageManager = "yarn" | "pnpm" | "npm";
 
 export const installPackages = async (
+  framework: string,
   projectPath: string,
   packages: Packages[],
   useTypescript: boolean,
@@ -37,7 +38,13 @@ export const installPackages = async (
     packageManager,
     bar
   );
-
+  await install(
+    `Installing ${framework}...`,
+    ["i", `${framework}`],
+    projectPath,
+    packageManager,
+    bar
+  );
   if (useTypescript) {
     await install(
       "Installing typescript",

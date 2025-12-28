@@ -16,7 +16,7 @@ export const run = async (
 ) => {
   switch (framework) {
     case "express":
-      await runExpress(packages, answers, subDirs, files);
+      await runExpress("express", packages, answers, subDirs, files);
       break;
   }
 };

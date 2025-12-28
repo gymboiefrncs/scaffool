@@ -10,6 +10,7 @@ type Answers = {
 };
 
 export const runExpress = async (
+  framework: string,
   packages: Packages[],
   answers: Answers,
   subDirs: string[],
@@ -18,6 +19,7 @@ export const runExpress = async (
   await createDirectories(answers.projectName, subDirs, files);
   if (packages.length) {
     await installPackages(
+      framework,
       path.resolve(answers.projectName),
       packages,
       answers.useTypescript
