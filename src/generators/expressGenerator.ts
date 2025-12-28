@@ -1,5 +1,5 @@
 import type { Packages } from "../commands/create.js";
-import { makeDirectories } from "../utils/makeDirectory.js";
+import { makeDirectories } from "../utils/createDirectory.js";
 import { installPackages } from "../utils/packageManager.js";
 import path from "node:path";
 
