@@ -11,11 +11,12 @@ export const run = async (
   framework: string,
   packages: Packages[],
   subDirs: string[],
-  answers: Answers
+  answers: Answers,
+  files: string[]
 ) => {
   switch (framework) {
     case "express":
-      await runExpress(packages, answers, subDirs);
+      await runExpress(packages, answers, subDirs, files);
       break;
   }
 };

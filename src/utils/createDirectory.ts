@@ -1,10 +1,12 @@
 import chalk from "chalk";
 import fs from "fs-extra";
 import { join } from "path";
+import { createFiles } from "./createFile.js";
 
 export const createDirectories = async (
   projectName: string,
-  subDirs: string[]
+  subDirs: string[],
+  files: string[]
 ) => {
   const dir = process.cwd();
   const options = {
@@ -18,7 +20,7 @@ export const createDirectories = async (
     await Promise.all(
       subDirs.map((sub) => fs.ensureDir(join(projectPath, sub), options))
     );
-
+    await createFiles(projectPath, files);
     console.log(chalk.cyan("Done creating directories\n"));
   } catch (err) {
     console.log(err);

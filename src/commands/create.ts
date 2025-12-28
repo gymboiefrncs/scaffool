@@ -25,11 +25,13 @@ export const createCommand = async (framework: string) => {
       "src/middlewares",
       "src/config",
     ];
+    const format = answers.useTypescript ? "ts" : "js";
+    const files = [`src/app.${format}`, `src/server.${format}`];
     const expressAnswers = await expressInputs();
     packages.push(expressAnswers);
 
     console.log(chalk.cyan("Creating project..."));
-    await run("express", packages, subDirs, answers);
+    await run("express", packages, subDirs, answers, files);
   }
 
   console.log(chalk.green("Done creating project"));
