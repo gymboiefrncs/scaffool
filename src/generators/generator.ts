@@ -10,10 +10,12 @@ type Answers = {
 export const run = async (
   framework: string,
   packages: Packages[],
+  subDirs: string[],
   answers: Answers
 ) => {
   switch (framework) {
     case "express":
-      await runExpress(packages, answers);
+      await runExpress(packages, answers, subDirs);
+      break;
   }
 };

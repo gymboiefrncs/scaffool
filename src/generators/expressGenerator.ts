@@ -9,8 +9,12 @@ type Answers = {
   LICENSE: string;
 };
 
-export const runExpress = async (packages: Packages[], answers: Answers) => {
-  await makeDirectories(answers.projectName);
+export const runExpress = async (
+  packages: Packages[],
+  answers: Answers,
+  subDirs: string[]
+) => {
+  await makeDirectories(answers.projectName, subDirs);
   if (packages.length) {
     await installPackages(
       path.resolve(answers.projectName),

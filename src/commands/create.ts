@@ -14,11 +14,22 @@ export const createCommand = async (framework: string) => {
 
   if (framework === "express") {
     let packages: Packages[] = [];
+    const subDirs = [
+      "src",
+      "src/controllers",
+      "src/services",
+      "src/models",
+      "src/utils",
+      "src/schemas",
+      "src/validators",
+      "src/middlewares",
+      "src/config",
+    ];
     const expressAnswers = await expressInputs();
     packages.push(expressAnswers);
 
     console.log(chalk.cyan("Creating project..."));
-    await run("express", packages, answers);
+    await run("express", packages, subDirs, answers);
   }
 
   console.log(chalk.green("Done creating project"));
