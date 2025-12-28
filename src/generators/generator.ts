@@ -1,5 +1,6 @@
 import type { Packages } from "../commands/create.js";
 import { runExpress } from "./expressGenerator.js";
+import { runFastify } from "./fastifyGenerator.js";
 
 type Answers = {
   projectName: string;
@@ -18,5 +19,7 @@ export const run = async (
     case "express":
       await runExpress("express", packages, answers, subDirs, files);
       break;
+    case "fastify":
+      await runFastify("fastify", packages, answers, subDirs, files);
   }
 };

@@ -34,6 +34,29 @@ export const createCommand = async (framework: string) => {
     await run("express", packages, subDirs, answers, files);
   }
 
+  if (framework === "fastify") {
+    let packages: Packages[] = [];
+    const subDirs = [
+      "src",
+      "src/controllers",
+      "src/services",
+      "src/models",
+      "src/utils",
+      "src/schemas",
+      "src/validators",
+      "src/middlewares",
+      "src/config",
+      "src/plugins",
+    ];
+    const format = answers.useTypescript ? "ts" : "js";
+    const files = [`src/app.${format}`, `src/server.${format}`];
+    const expressAnswers = await expressInputs();
+    packages.push(expressAnswers);
+
+    console.log(chalk.cyan("Creating project..."));
+    await run("fastify", packages, subDirs, answers, files);
+  }
+
   console.log(chalk.green("Done creating project"));
   console.log(chalk.green.bold("Happy coding :)"));
 };
