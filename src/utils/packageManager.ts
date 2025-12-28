@@ -15,7 +15,7 @@ export const installPackages = async (
 ) => {
   const { devPkgs, regPkgs } = packages[0]!;
 
-  let totalSteps = 1;
+  let totalSteps = 2;
   if (useTypescript) totalSteps++;
   totalSteps += regPkgs.length;
   totalSteps += devPkgs.length;
