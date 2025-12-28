@@ -2,7 +2,7 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import { join } from "path";
 
-export const makeDirectories = async (
+export const createDirectories = async (
   projectName: string,
   subDirs: string[]
 ) => {

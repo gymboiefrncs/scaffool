@@ -1,5 +1,5 @@
 import type { Packages } from "../commands/create.js";
-import { makeDirectories } from "../utils/createDirectory.js";
+import { createDirectories } from "../utils/createDirectory.js";
 import { installPackages } from "../utils/packageManager.js";
 import path from "node:path";
 
@@ -14,7 +14,7 @@ export const runExpress = async (
   answers: Answers,
   subDirs: string[]
 ) => {
-  await makeDirectories(answers.projectName, subDirs);
+  await createDirectories(answers.projectName, subDirs);
   if (packages.length) {
     await installPackages(
       path.resolve(answers.projectName),
