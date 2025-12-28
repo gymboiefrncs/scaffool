@@ -2,6 +2,7 @@ import cliProgress from "cli-progress";
 import chalk from "chalk";
 import { install, installDependencies } from "./loadingBar.js";
 import type { Packages } from "../commands/create.js";
+import { initializeTs } from "./initTs.js";
 
 export type AllowedPackageManager = "yarn" | "pnpm" | "npm";
 
@@ -45,6 +46,7 @@ export const installPackages = async (
       packageManager,
       bar
     );
+    await initializeTs(projectPath);
   }
 
   if (regPkgs.length) {
