@@ -1,8 +1,7 @@
 import { userInputs } from "../prompts/common.js";
-import { makeDirectories } from "../generators/generator.js";
 import { expressInputs } from "../prompts/express.js";
-import { installPackages } from "../utils/packageManager.js";
-import path from "node:path";
+import { run } from "../generators/generator.js";
+
 import chalk from "chalk";
 
 export type Packages = {
@@ -12,22 +11,14 @@ export type Packages = {
 
 export const createCommand = async (framework: string) => {
   const answers = await userInputs();
-  let packages: Packages[] = [];
 
   if (framework === "express") {
+    let packages: Packages[] = [];
     const expressAnswers = await expressInputs();
     packages.push(expressAnswers);
 
     console.log(chalk.cyan("Creating project..."));
-
-    await makeDirectories(answers.projectName);
-  }
-  if (packages.length) {
-    await installPackages(
-      path.resolve(answers.projectName),
-      packages,
-      answers.useTypescript
-    );
+    await run("express", packages, answers);
   }
 
   console.log(chalk.green("Done creating project"));
