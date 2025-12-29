@@ -1,25 +1,15 @@
-import type { Packages } from "../commands/create.js";
 import { runExpress } from "./expressGenerator.js";
 import { runFastify } from "./fastifyGenerator.js";
+import type { Data } from "../commands/create.js";
 
-type Answers = {
-  projectName: string;
-  useTypescript: boolean;
-  LICENSE: string;
-};
-
-export const run = async (
-  framework: string,
-  packages: Packages[],
-  subDirs: string[],
-  answers: Answers,
-  files: string[]
-) => {
+export const run = async (data: Data) => {
+  const { framework } = data;
   switch (framework) {
     case "express":
-      await runExpress("express", packages, answers, subDirs, files);
+      await runExpress(data);
       break;
     case "fastify":
-      await runFastify("fastify", packages, answers, subDirs, files);
+      await runFastify(data);
+      break;
   }
 };

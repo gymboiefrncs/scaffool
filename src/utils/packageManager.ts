@@ -1,22 +1,20 @@
 import cliProgress from "cli-progress";
 import chalk from "chalk";
-import { install, installDependencies } from "./packageInstaller.js";
-import type { Packages } from "../commands/create.js";
+import { runCommand, installDependencies } from "./packageInstaller.js";
 import { initializeTs } from "./initTs.js";
+import type { Data } from "../commands/create.js";
+import path from "node:path";
 
-export type AllowedPackageManager = "yarn" | "pnpm" | "npm";
+export const installPackages = async (data: Data) => {
+  const { framework, packages, answers } = data;
 
-export const installPackages = async (
-  framework: string,
-  projectPath: string,
-  packages: Packages[],
-  useTypescript: boolean,
-  packageManager: AllowedPackageManager = "npm"
-) => {
-  const { devPkgs, regPkgs } = packages[0]!;
+  const { devPkgs, regPkgs } = packages;
 
+  const projectPath = path.join(answers.projectName);
+
+  // ==== progress bar ====
   let totalSteps = 2;
-  if (useTypescript) totalSteps++;
+  if (answers.useTypescript) totalSteps++;
   totalSteps += regPkgs.length;
   totalSteps += devPkgs.length;
 
@@ -31,26 +29,19 @@ export const installPackages = async (
 
   bar.start(totalSteps, 0, { step: "Starting..." });
 
-  await install(
-    "Initializing",
-    ["init", "-y"],
-    projectPath,
-    packageManager,
-    bar
-  );
-  await install(
+  // ===== start installing =====
+  await runCommand("Initializing", ["init", "-y"], projectPath, bar);
+  await runCommand(
     `Installing ${framework}...`,
     ["i", `${framework}`],
     projectPath,
-    packageManager,
     bar
   );
-  if (useTypescript) {
-    await install(
+  if (answers.useTypescript) {
+    await runCommand(
       "Installing typescript",
       ["i", "-D", "typescript"],
       projectPath,
-      packageManager,
       bar
     );
     await initializeTs(projectPath);
@@ -61,7 +52,6 @@ export const installPackages = async (
       "Installing dependencies",
       regPkgs,
       projectPath,
-      packageManager,
       false,
       bar
     );
@@ -72,7 +62,6 @@ export const installPackages = async (
       "Installing devDependencies",
       devPkgs,
       projectPath,
-      packageManager,
       true,
       bar
     );

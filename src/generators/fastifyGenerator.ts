@@ -1,28 +1,8 @@
-import type { Packages } from "../commands/create.js";
 import { createDirectories } from "../utils/createDirectory.js";
 import { installPackages } from "../utils/packageManager.js";
-import path from "node:path";
+import type { Data } from "../commands/create.js";
 
-type Answers = {
-  projectName: string;
-  useTypescript: boolean;
-  LICENSE: string;
-};
-
-export const runFastify = async (
-  framework: string,
-  packages: Packages[],
-  answers: Answers,
-  subDirs: string[],
-  files: string[]
-) => {
-  await createDirectories(answers.projectName, subDirs, files);
-  if (packages.length) {
-    await installPackages(
-      framework,
-      path.resolve(answers.projectName),
-      packages,
-      answers.useTypescript
-    );
-  }
+export const runFastify = async (data: Data) => {
+  await createDirectories(data);
+  await installPackages(data);
 };
