@@ -10,7 +10,7 @@ const devMap: Record<string, boolean> = {
   helmet: false,
 };
 
-export const expressInputs = async () => {
+export const fastifyInputs = async () => {
   const expressPackages = await checkbox({
     message: "Select packages you want to install",
     choices: [

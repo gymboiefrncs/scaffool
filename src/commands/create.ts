@@ -1,6 +1,6 @@
 import { userInputs } from "../prompts/common.js";
-import { expressInputs } from "../prompts/express.js";
 import { run } from "../generators/generator.js";
+import { frameworkConfig } from "../utils/dirs.js";
 
 import chalk from "chalk";
 
@@ -11,51 +11,17 @@ export type Packages = {
 
 export const createCommand = async (framework: string) => {
   const answers = await userInputs();
+  const config = frameworkConfig[framework];
 
-  if (framework === "express") {
-    let packages: Packages[] = [];
-    const subDirs = [
-      "src",
-      "src/controllers",
-      "src/services",
-      "src/models",
-      "src/utils",
-      "src/schemas",
-      "src/validators",
-      "src/middlewares",
-      "src/config",
-    ];
-    const format = answers.useTypescript ? "ts" : "js";
-    const files = [`src/app.${format}`, `src/server.${format}`];
-    const expressAnswers = await expressInputs();
-    packages.push(expressAnswers);
+  if (!config) throw new Error(`Unsupported framework: ${framework}`);
 
-    console.log(chalk.cyan("Creating project..."));
-    await run("express", packages, subDirs, answers, files);
-  }
+  const packages: Packages[] = [await config.getPackages()];
 
-  if (framework === "fastify") {
-    let packages: Packages[] = [];
-    const subDirs = [
-      "src",
-      "src/controllers",
-      "src/services",
-      "src/models",
-      "src/utils",
-      "src/schemas",
-      "src/validators",
-      "src/middlewares",
-      "src/config",
-      "src/plugins",
-    ];
-    const format = answers.useTypescript ? "ts" : "js";
-    const files = [`src/app.${format}`, `src/server.${format}`];
-    const expressAnswers = await expressInputs();
-    packages.push(expressAnswers);
+  const format = answers.useTypescript ? "ts" : "js";
+  const files = [`src/app.${format}`, `src/server.${format}`];
 
-    console.log(chalk.cyan("Creating project..."));
-    await run("fastify", packages, subDirs, answers, files);
-  }
+  console.log(chalk.cyan("Creating project..."));
+  await run("express", packages, config.subDirs, answers, files);
 
   console.log(chalk.green("Done creating project"));
   console.log(chalk.green.bold("Happy coding :)"));
