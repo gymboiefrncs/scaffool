@@ -21,7 +21,7 @@ export const createCommand = async (framework: string) => {
   const files = [`src/app.${format}`, `src/server.${format}`];
 
   console.log(chalk.cyan("Creating project..."));
-  await run("express", packages, config.subDirs, answers, files);
+  await run(framework, packages, config.subDirs, answers, files);
 
   console.log(chalk.green("Done creating project"));
   console.log(chalk.green.bold("Happy coding :)"));
