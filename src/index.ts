@@ -1,16 +1,18 @@
-#!/usr/bin/env node
 import { Command } from "commander";
 import { createCommand } from "./commands/create.js";
-const program = new Command();
 
-program
-  .name("scafool")
-  .description("Project scaffolding tool")
-  .version("1.0.0");
+export const runCli = async () => {
+  const program = new Command();
 
-program
-  .command("build <framework>")
-  .description("Create a new project folder")
-  .action(createCommand);
+  program
+    .name("scafool")
+    .description("Project scaffolding tool")
+    .version("1.0.0");
 
-program.parseAsync();
+  program
+    .command("build <framework>")
+    .description("Create a new project folder")
+    .action(createCommand);
+
+  await program.parseAsync();
+};

@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "scaffool": "./dist/index.js"
+    "scaffool": "./bin/scaffool.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx src/index.ts",
+    "dev": "npx tsx bin/scaffool.ts",
     "typecheck": "npx tsc --noEmit"
   },
   "keywords": [],
