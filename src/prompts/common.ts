@@ -6,28 +6,8 @@ export const userInputs = async () => {
     validate: (val) => val.trim() !== "" || "Project cannot be empty",
   });
   const useTypescript = await confirm({ message: "Use typescript?" });
-  const LICENSE = await select({
-    message: "Select license:",
-    choices: [
-      {
-        name: "MIT",
-        value: "MIT",
-        description: "mit is..",
-      },
-      {
-        name: "Apache-2.0",
-        value: "Apache-2.0",
-        description: "apache is..",
-      },
-      {
-        name: "None",
-        value: "None",
-      },
-    ],
-  });
   return {
     projectName,
     useTypescript,
-    LICENSE,
   };
 };

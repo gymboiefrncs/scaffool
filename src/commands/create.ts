@@ -7,7 +7,6 @@ import { exitWithErr, handleError } from "../utils/errHandlers.js";
 type Answers = {
   projectName: string;
   useTypescript: boolean;
-  LICENSE: string;
 };
 export type Packages = {
   devPkgs: string[];
