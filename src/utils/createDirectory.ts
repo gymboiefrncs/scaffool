@@ -12,16 +12,12 @@ export const createDirectories = async (data: Data) => {
     mode: 0o775,
   };
   const projectPath = join(dir, answers.projectName);
-  try {
-    console.log(chalk.cyan("Creating directories..."));
-    await fs.ensureDir(projectPath, options);
+  console.log(chalk.cyan("Creating directories..."));
+  await fs.ensureDir(projectPath, options);
 
-    await Promise.all(
-      subDirs.map((sub) => fs.ensureDir(join(projectPath, sub), options))
-    );
-    await createFiles(projectPath, files);
-    console.log(chalk.cyan("Done creating directories\n"));
-  } catch (err) {
-    console.log(err);
-  }
+  await Promise.all(
+    subDirs.map((sub) => fs.ensureDir(join(projectPath, sub), options))
+  );
+  await createFiles(projectPath, files);
+  console.log(chalk.cyan("Done creating directories\n"));
 };

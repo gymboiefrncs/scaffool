@@ -4,6 +4,7 @@ import { runCommand, installDependencies } from "./packageInstaller.js";
 import { initializeTs } from "./initTs.js";
 import type { Data } from "../commands/create.js";
 import path from "node:path";
+import { catchErrorEachStep } from "./errHandlers.js";
 
 export const installPackages = async (data: Data) => {
   const { framework, packages, answers } = data;
@@ -30,40 +31,52 @@ export const installPackages = async (data: Data) => {
   bar.start(totalSteps, 0, { step: "Starting..." });
 
   // ===== start installing =====
-  await runCommand("Initializing", ["init", "-y"], projectPath, bar);
-  await runCommand(
-    `Installing ${framework}...`,
-    ["i", `${framework}`],
-    projectPath,
-    bar
+  await catchErrorEachStep("Initializing project", () =>
+    runCommand("Initializing", ["init", "-y"], projectPath, bar)
   );
-  if (answers.useTypescript) {
-    await runCommand(
-      "Installing typescript",
-      ["i", "-D", "typescript"],
+
+  await catchErrorEachStep(`Installing ${framework}`, () =>
+    runCommand(
+      `Installing ${framework}...`,
+      ["i", `${framework}`],
       projectPath,
       bar
+    )
+  );
+
+  if (answers.useTypescript) {
+    await catchErrorEachStep("Installing Typescript", () =>
+      runCommand(
+        "Installing typescript",
+        ["i", "-D", "typescript"],
+        projectPath,
+        bar
+      )
     );
     await initializeTs(projectPath);
   }
 
   if (regPkgs.length) {
-    await installDependencies(
-      "Installing dependencies",
-      regPkgs,
-      projectPath,
-      false,
-      bar
+    await catchErrorEachStep("Installing dependencies", () =>
+      installDependencies(
+        "Installing dependencies",
+        regPkgs,
+        projectPath,
+        false,
+        bar
+      )
     );
   }
 
   if (devPkgs.length) {
-    await installDependencies(
-      "Installing devDependencies",
-      devPkgs,
-      projectPath,
-      true,
-      bar
+    await catchErrorEachStep("Installing devDepndencies", () =>
+      installDependencies(
+        "Installing devDependencies",
+        devPkgs,
+        projectPath,
+        true,
+        bar
+      )
     );
   }
 

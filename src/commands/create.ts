@@ -2,6 +2,7 @@ import { userInputs } from "../prompts/common.js";
 import { run } from "../generators/generator.js";
 import { frameworkConfig, type FrameworkConfig } from "../utils/dirs.js";
 import chalk from "chalk";
+import { exitWithErr, handleError } from "../utils/errHandlers.js";
 
 type Answers = {
   projectName: string;
@@ -21,19 +22,28 @@ export type Data = {
 };
 
 export const createCommand = async (framework: string) => {
-  const answers = await userInputs();
   const config = frameworkConfig[framework];
+  if (!config) {
+    console.error(chalk.red.bold("Unsupported framework:"), framework);
+    process.exit(1);
+  }
 
-  if (!config) throw new Error(`Unsupported framework: ${framework}`);
+  const [errAnswers, answers] = await handleError(userInputs());
+  if (errAnswers) return exitWithErr("Failed to get user inputs", errAnswers);
 
-  const packages = await config.getPackages();
+  const [errPackages, packages] = await handleError(config.getPackages());
+  if (errPackages) return exitWithErr("Failed to get packages", errPackages);
 
   const format = answers.useTypescript ? "ts" : "js";
   const files = [`src/app.${format}`, `src/server.${format}`];
-
   const subDirs = config.subDirs;
-
-  const data = { framework, packages, subDirs, answers, files };
+  const data = {
+    framework,
+    packages: packages,
+    subDirs,
+    answers: answers,
+    files,
+  };
 
   console.log(chalk.cyan("Creating project..."));
 
