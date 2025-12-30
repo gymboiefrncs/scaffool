@@ -1,5 +1,5 @@
-import { runExpress } from "./expressGenerator.js";
-import { runFastify } from "./fastifyGenerator.js";
+import { runExpress } from "./express.js";
+import { runFastify } from "./fastify.js";
 import type { Data } from "../commands/create.js";
 
 export const run = async (data: Data) => {
