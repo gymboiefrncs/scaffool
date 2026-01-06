@@ -1,10 +1,10 @@
-import cliProgress from "cli-progress";
 import chalk from "chalk";
-import { runCommand, installDependencies } from "./packageInstaller.js";
-import { initializeTs } from "./initTs.js";
-import type { Data } from "../commands/create.js";
+import cliProgress from "cli-progress";
 import path from "node:path";
+import type { Data } from "../commands/create.js";
 import { catchErrorEachStep } from "./errHandlers.js";
+import { initializeTs } from "./initTs.js";
+import { installDependencies, runCommand } from "./packageInstaller.js";
 
 export const installPackages = async (data: Data) => {
   const { framework, packages, answers } = data;
@@ -32,13 +32,13 @@ export const installPackages = async (data: Data) => {
 
   // ===== start installing =====
   await catchErrorEachStep("Initializing project", () =>
-    runCommand("Initializing", ["init", "-y"], projectPath, bar)
+    runCommand("Initializing", ["init"], projectPath, bar)
   );
 
   await catchErrorEachStep(`Installing ${framework}`, () =>
     runCommand(
       `Installing ${framework}...`,
-      ["i", `${framework}`],
+      ["add", `${framework}`],
       projectPath,
       bar
     )
@@ -48,7 +48,7 @@ export const installPackages = async (data: Data) => {
     await catchErrorEachStep("Installing Typescript", () =>
       runCommand(
         "Installing typescript",
-        ["i", "-D", "typescript"],
+        ["add", "-D", "typescript"],
         projectPath,
         bar
       )

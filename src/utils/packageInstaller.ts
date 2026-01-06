@@ -1,5 +1,5 @@
-import { execa } from "execa";
 import cliProgress from "cli-progress";
+import { execa } from "execa";
 
 export const runCommand = async (
   label: string,
@@ -8,7 +8,7 @@ export const runCommand = async (
   bar: cliProgress.SingleBar
 ) => {
   bar.update({ step: label });
-  await execa("npm", args, { cwd, stdio: "pipe" });
+  await execa("pnpm", args, { cwd, stdio: "pipe" });
   bar.increment();
 };
 
@@ -21,7 +21,7 @@ export const installDependencies = async (
 ) => {
   bar.update({ step: label });
   for (const pkg of pkgs) {
-    await execa("npm", ["i", dev ? "-D" : "", pkg].filter(Boolean), {
+    await execa("pnpm", ["add", dev ? "-D" : "", pkg].filter(Boolean), {
       cwd,
       stdio: "pipe",
     });

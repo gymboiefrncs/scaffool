@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx bin/scaffool.ts",
-    "typecheck": "npx tsc --noEmit"
+    "dev": "tsx bin/scaffool.js",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
