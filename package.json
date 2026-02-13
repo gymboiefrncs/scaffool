@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx bin/scaffool.js",
+    "dev": "tsx src/index.ts",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],
