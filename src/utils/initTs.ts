@@ -1,9 +1,5 @@
 import { execa } from "execa";
 
-export const initializeTs = async (projectPath: string) => {
-  try {
-    await execa("pnpm", ["exec", "tsc", "--init"], { cwd: projectPath });
-  } catch (error) {
-    console.log("Failed to initialize typescript", error);
-  }
+export const initializeTs = async (projectPath: string): Promise<void> => {
+  await execa("pnpm", ["exec", "tsc", "--init"], { cwd: projectPath });
 };

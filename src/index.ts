@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import { createCommand } from "./commands/create.js";
 
-export const runCli = async () => {
+export const runCli = async (): Promise<void> => {
   const program = new Command();
 
   program

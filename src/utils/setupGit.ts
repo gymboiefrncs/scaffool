@@ -46,10 +46,6 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
     `;
-  try {
-    await execa("git", ["init"], { cwd: projectPath });
-    await fs.outputFile(join(projectPath, ".gitignore"), content);
-  } catch (err) {
-    console.log(err);
-  }
+  await execa("git", ["init"], { cwd: projectPath });
+  await fs.outputFile(join(projectPath, ".gitignore"), content);
 };

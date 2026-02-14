@@ -1,17 +1,17 @@
 import chalk from "chalk";
 import cliProgress from "cli-progress";
-import path from "node:path";
-import type { Data } from "../commands/create.js";
+import type { Data } from "../types.js";
 import { catchErrorEachStep } from "./errHandlers.js";
 import { initializeTs } from "./initTs.js";
 import { installDependencies, runCommand } from "./packageInstaller.js";
 
-export const installPackages = async (data: Data) => {
+export const installPackages = async (
+  data: Data,
+  projectPath: string,
+): Promise<void> => {
   const { framework, packages, answers } = data;
 
   const { devPkgs, regPkgs } = packages;
-
-  const projectPath = path.join(answers.projectName);
 
   // ==== progress bar ====
   let totalSteps = 2;
@@ -21,7 +21,7 @@ export const installPackages = async (data: Data) => {
 
   const bar = new cliProgress.SingleBar({
     format: `${chalk.blue("Setup")} |${chalk.green(
-      "{bar}"
+      "{bar}",
     )}| {percentage}% | {step}`,
     barCompleteChar: "\u2588",
     barIncompleteChar: "\u2591",
@@ -32,7 +32,7 @@ export const installPackages = async (data: Data) => {
 
   // ===== start installing =====
   await catchErrorEachStep("Initializing project", () =>
-    runCommand("Initializing", ["init"], projectPath, bar)
+    runCommand("Initializing", ["init"], projectPath, bar),
   );
 
   await catchErrorEachStep(`Installing ${framework}`, () =>
@@ -40,8 +40,8 @@ export const installPackages = async (data: Data) => {
       `Installing ${framework}...`,
       ["add", `${framework}`],
       projectPath,
-      bar
-    )
+      bar,
+    ),
   );
 
   if (answers.useTypescript) {
@@ -50,10 +50,12 @@ export const installPackages = async (data: Data) => {
         "Installing typescript",
         ["add", "-D", "typescript"],
         projectPath,
-        bar
-      )
+        bar,
+      ),
     );
-    await initializeTs(projectPath);
+    await catchErrorEachStep("Initializing TypeScript config", () =>
+      initializeTs(projectPath),
+    );
   }
 
   if (regPkgs.length) {
@@ -63,8 +65,8 @@ export const installPackages = async (data: Data) => {
         regPkgs,
         projectPath,
         false,
-        bar
-      )
+        bar,
+      ),
     );
   }
 
@@ -75,8 +77,8 @@ export const installPackages = async (data: Data) => {
         devPkgs,
         projectPath,
         true,
-        bar
-      )
+        bar,
+      ),
     );
   }
 

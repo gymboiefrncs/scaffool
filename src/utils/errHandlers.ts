@@ -3,7 +3,7 @@ import chalk from "chalk";
 type Result<T> = [null, T] | [Error, null];
 
 export const handleError = async <T>(
-  promise: Promise<T>
+  promise: Promise<T>,
 ): Promise<Result<T>> => {
   try {
     const result = await promise;
@@ -14,14 +14,14 @@ export const handleError = async <T>(
   }
 };
 
-export const exitWithErr = (context: string, error: Error): never => {
+export const exitWithErr = (context: string, error: Error): void => {
   console.error(chalk.red.bold(`\n ${context}`), chalk.red(error.message));
-  process.exit(1);
+  process.exitCode = 1;
 };
 
 export const catchErrorEachStep = async (
   step: string,
-  fn: () => Promise<void>
+  fn: () => Promise<void>,
 ) => {
   const [err] = await handleError(fn());
   if (err) exitWithErr(`Failed at step: ${step}`, err);
