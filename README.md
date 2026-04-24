@@ -2,6 +2,10 @@ Scaffool 🚀
 
 Scaffool is my personal backend API scaffolding tool for Node.js projects. It automates setup so I don’t have to do repetitive tasks every time.
 
+📥 Installation:
+
+	npm install -g scaffool
+
 ⚡ Features:
 
 	📦 Automatic installation of required packages

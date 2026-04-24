@@ -1,12 +1,18 @@
 {
   "name": "scaffool",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Personal backend API scaffolding tool for Node.js projects",
+  "main": "dist/index.js",
   "bin": {
     "scaffool": "./bin/scaffool.js"
   },
+  "files": [
+    "bin",
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx src/index.ts",
     "typecheck": "tsc --noEmit"
