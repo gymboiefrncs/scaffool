@@ -16,3 +16,11 @@ export const runCli = async (): Promise<void> => {
 
   await program.parseAsync();
 };
+
+runCli().catch((error) => {
+  console.error(
+    "An unexpected error occurred:",
+    error instanceof Error ? error.message : error,
+  );
+  process.exit(1);
+});

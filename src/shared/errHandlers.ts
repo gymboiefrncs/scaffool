@@ -19,7 +19,7 @@ export const exitWithErr = (context: string, error: Error): void => {
   process.exitCode = 1;
 };
 
-export const catchErrorEachStep = async (
+export const catchErrorAtStep = async (
   step: string,
   fn: () => Promise<void>,
 ) => {

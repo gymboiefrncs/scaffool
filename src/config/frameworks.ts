@@ -1,5 +1,5 @@
-import { getPackages } from "../prompts/packages.js";
-import type { FrameworkConfig } from "../types.js";
+import { getPackages } from "../prompts/index.js";
+import type { FrameworkConfig } from "../shared/types.js";
 
 const commonSubDirs = [
   "src",

@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import fs from "fs-extra";
 import { join } from "path";
-import type { Data } from "../types.js";
+import type { Data } from "../shared/types.js";
 
 export const createDirectories = async (data: Data): Promise<string> => {
   const { subDirs, answers } = data;
@@ -17,4 +17,10 @@ export const createDirectories = async (data: Data): Promise<string> => {
   console.log(chalk.cyan("Done creating directories\n"));
 
   return projectPath;
+};
+
+export const createFiles = async (projectPath: string, files: string[]) => {
+  await Promise.all(
+    files.map((file) => fs.ensureFile(join(projectPath, file))),
+  );
 };

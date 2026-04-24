@@ -1,8 +1,8 @@
-import { userInputs } from "../prompts/common.js";
+import { userInputs } from "../prompts/index.js";
 import { run } from "../generators/generator.js";
 import { frameworkConfig } from "../config/frameworks.js";
 import chalk from "chalk";
-import { exitWithErr, handleError } from "../utils/errHandlers.js";
+import { exitWithErr, handleError } from "../shared/errHandlers.js";
 
 export const createCommand = async (framework: string): Promise<void> => {
   const config = frameworkConfig[framework];
