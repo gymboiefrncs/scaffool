@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import cliProgress from "cli-progress";
 import type { Data } from "../shared/types.js";
-import { catchErrorAtStep } from "../shared/errHandlers.js";
+import { runStep } from "../shared/errors.js";
 import { installDependencies, runCommand } from "./installer.js";
 import { execa } from "execa";
 
-const initializeTs = async (projectPath: string): Promise<void> => {
+const initializeTypeScript = async (projectPath: string): Promise<void> => {
   await execa("pnpm", ["exec", "tsc", "--init"], { cwd: projectPath });
 };
 
@@ -15,13 +15,13 @@ export const installPackages = async (
 ): Promise<void> => {
   const { framework, packages, answers } = data;
 
-  const { devPkgs, regPkgs } = packages;
+  const { selectedDevDependencies, selectedDependencies } = packages;
 
   // ==== progress bar ====
   let totalSteps = 2;
   if (answers.useTypescript) totalSteps++;
-  totalSteps += regPkgs.length;
-  totalSteps += devPkgs.length;
+  totalSteps += selectedDependencies.length;
+  totalSteps += selectedDevDependencies.length;
 
   const bar = new cliProgress.SingleBar({
     format: `${chalk.blue("Setup")} |${chalk.green(
@@ -35,11 +35,11 @@ export const installPackages = async (
   bar.start(totalSteps, 0, { step: "Starting..." });
 
   // ===== start installing =====
-  await catchErrorAtStep("Initializing project", () =>
+  await runStep("Initializing project", () =>
     runCommand("Initializing", ["init"], projectPath, bar),
   );
 
-  await catchErrorAtStep(`Installing ${framework}`, () =>
+  await runStep(`Installing ${framework}`, () =>
     runCommand(
       `Installing ${framework}...`,
       ["add", `${framework}`],
@@ -49,7 +49,7 @@ export const installPackages = async (
   );
 
   if (answers.useTypescript) {
-    await catchErrorAtStep("Installing Typescript", () =>
+    await runStep("Installing Typescript", () =>
       runCommand(
         "Installing typescript",
         ["add", "-D", "typescript"],
@@ -57,16 +57,16 @@ export const installPackages = async (
         bar,
       ),
     );
-    await catchErrorAtStep("Initializing TypeScript config", () =>
-      initializeTs(projectPath),
+    await runStep("Initializing TypeScript config", () =>
+      initializeTypeScript(projectPath),
     );
   }
 
-  if (regPkgs.length) {
-    await catchErrorAtStep("Installing dependencies", () =>
+  if (selectedDependencies.length) {
+    await runStep("Installing dependencies", () =>
       installDependencies(
         "Installing dependencies",
-        regPkgs,
+        selectedDependencies,
         projectPath,
         false,
         bar,
@@ -74,11 +74,11 @@ export const installPackages = async (
     );
   }
 
-  if (devPkgs.length) {
-    await catchErrorAtStep("Installing devDepndencies", () =>
+  if (selectedDevDependencies.length) {
+    await runStep("Installing devDepndencies", () =>
       installDependencies(
         "Installing devDependencies",
-        devPkgs,
+        selectedDevDependencies,
         projectPath,
         true,
         bar,

@@ -4,8 +4,8 @@ export type Answers = {
 };
 
 export type Packages = {
-  devPkgs: string[];
-  regPkgs: string[];
+  selectedDevDependencies: string[];
+  selectedDependencies: string[];
 };
 
 export type Data = {

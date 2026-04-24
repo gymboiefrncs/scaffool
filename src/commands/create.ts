@@ -1,25 +1,26 @@
-import { userInputs } from "../prompts/index.js";
+import { promptUser } from "../prompts/index.js";
 import { run } from "../generators/generator.js";
-import { frameworkConfig } from "../config/frameworks.js";
+import { frameworks } from "../config/frameworks.js";
 import chalk from "chalk";
-import { exitWithErr, handleError } from "../shared/errHandlers.js";
+import { logError, handleError } from "../shared/errors.js";
 
 export const createCommand = async (framework: string): Promise<void> => {
-  const config = frameworkConfig[framework];
+  const config = frameworks[framework];
   if (!config) {
-    return exitWithErr(
+    return logError(
       "Unsupported framework",
       new Error(
-        `"${framework}" is not supported. Use: ${Object.keys(frameworkConfig).join(", ")}`,
+        `"${framework}" is not supported.
+        Supported frameworks: ${Object.keys(frameworks).join(", ")}`,
       ),
     );
   }
 
-  const [errAnswers, answers] = await handleError(userInputs());
-  if (errAnswers) return exitWithErr("Failed to get user inputs", errAnswers);
+  const [errAnswers, answers] = await handleError(promptUser());
+  if (errAnswers) return logError("Failed to get user inputs", errAnswers);
 
   const [errPackages, packages] = await handleError(config.getPackages());
-  if (errPackages) return exitWithErr("Failed to get packages", errPackages);
+  if (errPackages) return logError("Failed to get packages", errPackages);
 
   const format = answers.useTypescript ? "ts" : "js";
   const files = [`src/app.${format}`, `src/server.${format}`];
@@ -34,7 +35,7 @@ export const createCommand = async (framework: string): Promise<void> => {
   console.log(chalk.cyan("Creating project..."));
 
   const [errRun] = await handleError(run(data));
-  if (errRun) return exitWithErr("Failed to create project", errRun);
+  if (errRun) return logError("Failed to create project", errRun);
 
   console.log(chalk.green("Done creating project"));
   console.log(chalk.green.bold("Happy coding :)"));

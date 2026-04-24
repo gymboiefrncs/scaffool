@@ -14,15 +14,12 @@ export const handleError = async <T>(
   }
 };
 
-export const exitWithErr = (context: string, error: Error): void => {
+export const logError = (context: string, error: Error): void => {
   console.error(chalk.red.bold(`\n ${context}`), chalk.red(error.message));
   process.exitCode = 1;
 };
 
-export const catchErrorAtStep = async (
-  step: string,
-  fn: () => Promise<void>,
-) => {
+export const runStep = async (step: string, fn: () => Promise<void>) => {
   const [err] = await handleError(fn());
-  if (err) exitWithErr(`Failed at step: ${step}`, err);
+  if (err) logError(`Failed at step: ${step}`, err);
 };

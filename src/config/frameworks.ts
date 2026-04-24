@@ -13,7 +13,7 @@ const commonSubDirs = [
   "src/config",
 ];
 
-export const frameworkConfig: Record<string, FrameworkConfig> = {
+export const frameworks: Record<string, FrameworkConfig> = {
   express: {
     getPackages: getPackages("express"),
     subDirs: commonSubDirs,
