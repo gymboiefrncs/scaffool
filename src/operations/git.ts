@@ -1,6 +1,7 @@
 import { execa } from "execa";
 import fs from "fs-extra";
 import { join } from "node:path";
+import { FileSystemError, ProcessError } from "../shared/errors.js";
 
 export const setupGit = async (projectPath: string) => {
   const content = `
@@ -46,6 +47,22 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
     `;
-  await execa("git", ["init"], { cwd: projectPath });
-  await fs.outputFile(join(projectPath, ".gitignore"), content);
+
+  try {
+    await execa("git", ["init"], { cwd: projectPath });
+  } catch (error) {
+    throw new ProcessError("Failed to initialize git repository", {
+      error: error instanceof Error ? error : undefined,
+      step: "setup-git",
+    });
+  }
+
+  try {
+    await fs.outputFile(join(projectPath, ".gitignore"), content);
+  } catch (error) {
+    throw new FileSystemError("Failed to create .gitignore file", {
+      error: error instanceof Error ? error : undefined,
+      step: "setup-git",
+    });
+  }
 };

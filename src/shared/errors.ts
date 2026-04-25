@@ -1,25 +1,55 @@
 import chalk from "chalk";
 
-type Result<T> = [null, T] | [Error, null];
-
-export const handleError = async <T>(
-  promise: Promise<T>,
-): Promise<Result<T>> => {
-  try {
-    const result = await promise;
-    return [null, result];
-  } catch (error) {
-    const err = error instanceof Error ? error : new Error(String(error));
-    return [err, null];
-  }
-};
+type ErrorContext = Record<string, unknown>;
 
 export const logError = (context: string, error: Error): void => {
   console.error(chalk.red.bold(`\n ${context}`), chalk.red(error.message));
   process.exitCode = 1;
 };
 
-export const runStep = async (step: string, fn: () => Promise<void>) => {
-  const [err] = await handleError(fn());
-  if (err) logError(`Failed at step: ${step}`, err);
-};
+class CLIError extends Error {
+  constructor(
+    message: string,
+    public exitCode: number = 1,
+    public context?: ErrorContext,
+  ) {
+    super(message);
+    this.name = new.target.name;
+  }
+}
+
+export class ValidationError extends CLIError {
+  constructor(message: string, context?: ErrorContext) {
+    super(message, 2, context);
+  }
+}
+
+export class PromptError extends CLIError {
+  constructor(message: string, context?: ErrorContext) {
+    super(message, 2, context);
+  }
+}
+
+export class FileSystemError extends CLIError {
+  constructor(message: string, context?: ErrorContext) {
+    super(message, 1, context);
+  }
+}
+
+export class DependencyError extends CLIError {
+  constructor(message: string, context?: ErrorContext) {
+    super(message, 1, context);
+  }
+}
+
+export class ProcessError extends CLIError {
+  constructor(message: string, context?: ErrorContext) {
+    super(message, 1, context);
+  }
+}
+
+export class InternalError extends CLIError {
+  constructor(message = "Unexpected internal error", context?: ErrorContext) {
+    super(message, 1, context);
+  }
+}
