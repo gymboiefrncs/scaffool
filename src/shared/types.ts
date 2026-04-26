@@ -12,7 +12,6 @@ export type Data = {
   framework: string;
   packages: Packages;
   answers: Answers;
-  files: string[];
 };
 
 export type FrameworkConfig = {

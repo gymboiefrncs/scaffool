@@ -21,7 +21,9 @@ export const createDirectories = async (data: Data): Promise<string> => {
   return projectPath;
 };
 
-export const createFiles = async (projectPath: string, files: string[]) => {
+export const createFiles = async (projectPath: string, data: Data) => {
+  const format = data.answers.useTypescript ? "ts" : "js";
+  const files = [`src/app.${format}`, `src/server.${format}`];
   try {
     await Promise.all(
       files.map((file) => fs.ensureFile(join(projectPath, file))),

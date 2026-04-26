@@ -13,7 +13,7 @@ export const run = async (
   const projectPath = await createDirectories(data);
   onProgress("Created directories");
 
-  await createFiles(projectPath, data.files);
+  await createFiles(projectPath, data);
   onProgress("Created files");
 
   await setupGit(projectPath);

@@ -19,13 +19,10 @@ export const createCommand = async (framework: string): Promise<void> => {
   const answers = await promptUser();
   const packages = await config.getPackages();
 
-  const format = answers.useTypescript ? "ts" : "js";
-
   const data = {
     framework,
     packages,
     answers,
-    files: [`src/app.${format}`, `src/server.${format}`],
   };
 
   let totalSteps = 5; // base steps: create dirs, create files, init git, init project, install framework
