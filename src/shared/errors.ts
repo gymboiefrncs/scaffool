@@ -1,10 +1,32 @@
 import chalk from "chalk";
 
 type ErrorContext = Record<string, unknown>;
+type LogErrorOptions = {
+  message: string;
+  step: unknown;
+  error?: unknown;
+  debug?: string;
+};
 
-export const logError = (context: string, error: Error): void => {
-  console.error(chalk.red.bold(`\n ${context}`), chalk.red(error.message));
-  process.exitCode = 1;
+export const logError = ({
+  message,
+  step,
+  error,
+  debug,
+}: LogErrorOptions): void => {
+  if (step) {
+    console.error(chalk.red(`\nError during step: ${step}`));
+  }
+
+  if (message) {
+    console.error(chalk.red(`\n${message}`));
+  }
+
+  if (error) {
+    console.error(
+      debug ? error : chalk.red("\nRun with DEBUG=1 for more details"),
+    );
+  }
 };
 
 class CLIError extends Error {
@@ -44,12 +66,6 @@ export class DependencyError extends CLIError {
 
 export class ProcessError extends CLIError {
   constructor(message: string, context?: ErrorContext) {
-    super(message, 1, context);
-  }
-}
-
-export class InternalError extends CLIError {
-  constructor(message = "Unexpected internal error", context?: ErrorContext) {
     super(message, 1, context);
   }
 }

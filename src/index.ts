@@ -1,13 +1,13 @@
+import "dotenv/config";
 import { Command } from "commander";
 import { createCommand } from "./commands/create.js";
 import {
   DependencyError,
   FileSystemError,
-  InternalError,
+  logError,
   ProcessError,
   ValidationError,
 } from "./shared/errors.js";
-import chalk from "chalk";
 
 export const runCli = async (): Promise<void> => {
   const program = new Command();
@@ -28,33 +28,42 @@ export const runCli = async (): Promise<void> => {
 runCli().catch((error) => {
   switch (true) {
     case error instanceof ValidationError:
-      console.error(chalk.red(`\n${error.message}`));
+      logError({
+        message: error.message,
+        step: error.context?.step || "unknown",
+      });
       process.exit(error.exitCode);
     case error instanceof ProcessError:
-      console.error(
-        chalk.red(`\nError during step: ${error.context?.step || "unknown"}`),
-      );
-      console.error(chalk.red(`\n${error.message}`));
+      logError({
+        message: error.message,
+        step: error.context?.step || "unknown",
+        error: error.context?.error,
+        debug: process.env.DEBUG,
+      });
       process.exit(error.exitCode);
     case error instanceof FileSystemError:
-      console.error(
-        chalk.red(`\nError during step: ${error.context?.step || "unknown"}`),
-      );
-      console.error(chalk.red(`\n${error.message}`));
+      logError({
+        message: error.message,
+        step: error.context?.step || "unknown",
+        error: error.context?.error,
+        debug: process.env.DEBUG,
+      });
       process.exit(error.exitCode);
     case error instanceof DependencyError:
-      console.error(
-        chalk.red(`\nError during step: ${error.context?.step || "unknown"}`),
-      );
-      console.error(chalk.red(`\n${error.message}`));
-      process.exit(error.exitCode);
-    case error instanceof InternalError:
-      console.error(chalk.red(`\n${error.message}`));
-      console.error(error.context?.error);
+      logError({
+        message: error.message,
+        step: error.context?.step || "unknown",
+        error: error.context?.error,
+        debug: process.env.DEBUG,
+      });
       process.exit(error.exitCode);
     default:
-      console.error(chalk.red("\nAn unexpected error occurred"));
-      console.error(error);
+      logError({
+        message: "An unexpected error occurred",
+        step: "unknown",
+        error: error.context?.error,
+        debug: process.env.DEBUG,
+      });
       process.exit(1);
   }
 });

@@ -2,7 +2,7 @@ import { promptUser } from "../prompts/index.js";
 import { run } from "../generators/generator.js";
 import { frameworks } from "../config/frameworks.js";
 import chalk from "chalk";
-import { logError, ValidationError } from "../shared/errors.js";
+import { ValidationError } from "../shared/errors.js";
 import cliProgress from "cli-progress";
 
 export const createCommand = async (framework: string): Promise<void> => {
