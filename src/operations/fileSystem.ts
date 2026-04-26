@@ -8,10 +8,9 @@ export const createDirectories = async (data: Data): Promise<string> => {
 
   const projectPath = join(process.cwd(), answers.projectName);
   const options = { mode: 0o775 };
-
   try {
-    await fs.ensureDir(projectPath, options);
-    await fs.ensureDir(join(projectPath, "src"), options);
+    await fs.mkdir(projectPath, options);
+    await fs.mkdir(join(projectPath, "src"), options);
   } catch (error) {
     throw new FileSystemError("Failed to create directories", {
       error: error instanceof Error ? error : undefined,
