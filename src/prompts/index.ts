@@ -66,6 +66,31 @@ const createPackagePrompt = async (framework: string): Promise<Packages> => {
     (pkg) => !devDependenciesMap.has(pkg),
   );
 
+  const wantsExtra = await confirm({
+    message: "Do you want to add extra packages?",
+  });
+
+  if (wantsExtra) {
+    let addingMore = true;
+    while (addingMore) {
+      const packageName = await input({
+        message: "Enter the package name you want to install:",
+        validate: (val) =>
+          val.trim() !== "" || "Please enter a package to install",
+      });
+
+      const isDev = await confirm({
+        message: `Is "${packageName}" a dev dependency?`,
+      });
+      isDev
+        ? selectedDevDependencies.push(packageName.trim())
+        : selectedDependencies.push(packageName.trim());
+      addingMore = await confirm({
+        message: "Do you want to add another package?",
+      });
+    }
+  }
+
   return {
     selectedDevDependencies,
     selectedDependencies,

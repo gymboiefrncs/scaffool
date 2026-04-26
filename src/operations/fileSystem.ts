@@ -4,16 +4,14 @@ import type { Data } from "../shared/types.js";
 import { FileSystemError } from "../shared/errors.js";
 
 export const createDirectories = async (data: Data): Promise<string> => {
-  const { subDirs, answers } = data;
+  const { answers } = data;
 
   const projectPath = join(process.cwd(), answers.projectName);
   const options = { mode: 0o775 };
 
   try {
     await fs.ensureDir(projectPath, options);
-    await Promise.all(
-      subDirs.map((sub) => fs.ensureDir(join(projectPath, sub), options)),
-    );
+    await fs.ensureDir(join(projectPath, "src"), options);
   } catch (error) {
     throw new FileSystemError("Failed to create directories", {
       error: error instanceof Error ? error : undefined,

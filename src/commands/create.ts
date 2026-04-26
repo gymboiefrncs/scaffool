@@ -24,7 +24,6 @@ export const createCommand = async (framework: string): Promise<void> => {
   const data = {
     framework,
     packages,
-    subDirs: config.subDirs,
     answers,
     files: [`src/app.${format}`, `src/server.${format}`],
   };
