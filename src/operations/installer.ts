@@ -1,4 +1,3 @@
-import cliProgress from "cli-progress";
 import { execa } from "execa";
 import { DependencyError, ProcessError } from "../shared/errors.js";
 

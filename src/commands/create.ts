@@ -14,10 +14,13 @@ export const createCommand = async (framework: string): Promise<void> => {
     );
   }
 
-  console.log(chalk.cyan("Creating project..."));
+  console.log(chalk.cyan("Creating project...\n"));
 
   const answers = await promptUser();
   const packages = await config.getPackages();
+
+  // Add a blank line after the extra packages prompt for better UX
+  console.log();
 
   const data = {
     framework,
@@ -43,6 +46,6 @@ export const createCommand = async (framework: string): Promise<void> => {
   });
   bar.stop();
 
-  console.log(chalk.green("Done creating project"));
+  console.log(chalk.green.bold("\nDone creating project"));
   console.log(chalk.green.bold("Happy coding :)"));
 };

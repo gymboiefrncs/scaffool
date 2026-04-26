@@ -17,7 +17,7 @@ export const run = async (
   onProgress("Created files");
 
   await setupGit(projectPath);
-  onProgress("Initialized git repository");
+  onProgress("Initialized git");
 
   await installPackages(data, projectPath, onProgress);
 };
@@ -42,7 +42,7 @@ const installPackages = async (
   const { selectedDevDependencies, selectedDependencies } = packages;
 
   await runCommand(["init"], projectPath);
-  onProgress("Initialized project");
+  onProgress("Project initialized");
 
   await runCommand(["add", framework], projectPath);
   onProgress(`Installed ${framework}`);
