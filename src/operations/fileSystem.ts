@@ -1,12 +1,18 @@
 import fs from "fs-extra";
 import { join } from "path";
 import type { Data } from "../shared/types.js";
-import { FileSystemError } from "../shared/errors.js";
+import { FileSystemError, ValidationError } from "../shared/errors.js";
 
 export const createDirectories = async (data: Data): Promise<string> => {
-  const { answers } = data;
+  const projectName = data.answers.projectName.trim();
 
-  const projectPath = join(process.cwd(), answers.projectName);
+  if (!projectName || /[\\/]/.test(projectName)) {
+    throw new ValidationError("Invalid projedct name", {
+      step: "validate-project-name",
+    });
+  }
+
+  const projectPath = join(process.cwd(), projectName);
   const options = { mode: 0o775 };
   try {
     await fs.mkdir(projectPath, options);

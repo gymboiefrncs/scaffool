@@ -1,5 +1,6 @@
 import { input, checkbox, Separator, confirm } from "@inquirer/prompts";
 import type { Packages, PackageChoice } from "../shared/types.js";
+import { PromptError } from "../shared/errors.js";
 
 export const promptUser = async (): Promise<{
   projectName: string;
@@ -80,7 +81,7 @@ const createPackagePrompt = async (framework: string): Promise<Packages> => {
       });
 
       const isDev = await confirm({
-        message: `Is "${packageName}" a dev dependency?`,
+        message: `Is "${packageName.trim()}" a dev dependency?`,
       });
       isDev
         ? selectedDevDependencies.push(packageName.trim())

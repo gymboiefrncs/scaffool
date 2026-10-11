@@ -13,7 +13,7 @@ export const runCli = async (): Promise<void> => {
   const program = new Command();
 
   program
-    .name("scafool")
+    .name("scaffool")
     .description("Project scaffolding tool")
     .version("1.0.0");
 
